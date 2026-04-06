@@ -1,16 +1,24 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
-<div class="form-style">
-	<h1>Log in</h1>
-	<form class="site-form" action="." method="post">
-		{% csrf_token %}
-		{{ form }}
-		{% if request.GET.next %}
-			<input type="hidden" name="next" value="{{ request.GET.next }}">
-		{% endif %}
-		<input class="submit" type="submit" value="Log in">
-	</form>
+
+<div class="col-md-4 mx-auto">
+
+<div class="glass-card fade-in">
+
+<h3 class="text-warning text-center mb-4">Login</h3>
+
+<form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+
+<button class="btn btn-ai w-100">
+Login
+</button>
+
+</form>
+
 </div>
+</div>
+
 {% endblock %}

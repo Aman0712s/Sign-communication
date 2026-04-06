@@ -1,133 +1,438 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block content %}
-<div class="split left">
-	<h2 align="center">Enter Text or Use Mic</h2>
-	<br>
-		<form action="" method="post" align="left">
-		{% csrf_token %}
-					<input type="text" name="sen" class="mytext" id="speechToText" placeholder="">
-					<button type="button" name="button" class="mic" onclick="record()"><img src="{% static 'mic3.png' %}" height="32px" width="38px" /></button>
-		  			&nbsp&nbsp&nbsp&nbsp
-		  			<input type="submit" name="submit" class="submit">
 
-		</form>
-		<br>
-		<table cellspacing="20px">
-			<tr>
-				<td class="td">The text that you entered is:</td>
-				<td class="td">{{ text }}</td>
-			</tr>
-			<tr>
-				<td class="td">Key words in sentence:</td>
-				<td class="td">
-				<ul class="td" id="list" align="center">
-  					{% for word in words %}
-    				<li id="{{ i }}" style="margin-right: 8px">{{ word }}</li>
-  					{% endfor %}
-				</ul>
-			</td>
-		</tr>
-	</table></div>
-  <div class="split right">
-  <h2 align="center">Sign Language Animation</h2>
+<div class="row g-4">
 
-	<div style="text-align:center">	&nbsp&nbsp
-  	<button class="submit" onclick="playPause()">Play/Pause</button>
-  	<!--  LETS USE ONLY PLAY PAUSE BUTTON WITH 720 *420 ,IT FITS THE SCREEN ASHISH
+<!-- INPUT PANEL -->
+<div class="col-md-6">
 
-  	<button onclick="makeBig()">Big</button>
-  	<button onclick="makeSmall()">Small</button>
-  	<button onclick="makeNormal()">Normal</button>-->
+<div class="glass">
 
+<h3 class="text-warning mb-3">Enter Text / Voice</h3>
 
-  	<video id="videoPlayer" width="600" height="350"  preload="auto" autoplay>
-    	<source src="" type="video/mp4">
-    Your browser does not support HTML5 video.
-  	</video>
-  	</div></div>
+<form method="post" id="speechForm">
+{% csrf_token %}
 
+<div class="d-flex gap-2">
+
+<input
+type="text"
+name="sen"
+value="{{ text }}"
+placeholder="Type sentence..."
+class="form-control ai-input"
+id="speechToText"
+>
+
+<button type="button" onclick="record()" class="btn btn-success" style="background:#22c55e; border:none;">
+🎤
+</button>
+
+</div>
+
+<button type="submit" class="btn btn-ai w-100 mt-3">
+Convert to Sign
+</button>
+
+</form>
+
+<div class="loader mt-4" id="loader" style="display:none; text-align:center;">Loading...</div>
+
+{% if text %}
+
+<hr>
+
+<h5 class="text-info">Your Sentence</h5>
+<p class="text-light">{{ text }}</p>
+
+<h5 class="text-info mt-4">Sign Language Sequence</h5>
+
+<div id="wordList" class="d-flex flex-wrap gap-2 mt-3">
+{% for word in words %}
+<span class="word-chip" data-word="{{ word }}" data-index="{{ forloop.counter0 }}">{{ word }}</span>
+{% endfor %}
+</div>
+
+<button class="btn btn-success mt-4 w-100" onclick="playSentence()" id="playButton" style="background:#22c55e;">
+▶ Play Full Sentence
+</button>
+
+<button class="btn btn-outline-light mt-2 w-100" onclick="stopPlayback()" id="stopButton" style="display:none;">
+⏹️ Stop
+</button>
+
+{% endif %}
+
+</div>
+</div>
+
+<!-- VIDEO PANEL -->
+<div class="col-md-6">
+
+<div class="glass text-center">
+
+<h3 class="text-warning mb-3">Sign Language Videos</h3>
+
+<div id="video-container" style="background: #000; border-radius: 15px; overflow: hidden; position: relative;">
+    <video id="videoPlayer" width="100%" style="display: block; max-height: 400px;">
+        <source src="" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
+    <!-- Progress indicator -->
+    <div id="video-progress" style="position: absolute; bottom: 0; left: 0; height: 4px; background: #22c55e; width: 0%; transition: width 0.3s ease;"></div>
+</div>
+
+<p class="text-muted mt-2" id="video-status">
+    {% if words %}
+        Ready to play {{ words|length }} signs
+    {% else %}
+        Enter a sentence to see signs
+    {% endif %}
+</p>
+
+<!-- Current word indicator -->
+<div id="current-word" class="mt-2" style="font-size: 18px; color: #facc15; min-height: 30px;">
+    {% if words %}
+        Click Play to start
+    {% endif %}
+</div>
+
+</div>
+</div>
+
+</div>
+
+<style>
+.word-chip {
+    cursor: pointer;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #facc15, #fde68a);
+    color: black;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin: 5px;
+    font-size: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.word-chip:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px #facc15;
+}
+
+.word-chip.playing {
+    background: linear-gradient(135deg, #22c55e, #4ade80);
+    color: white;
+    transform: scale(1.2);
+    box-shadow: 0 0 30px #22c55e;
+    border: 2px solid white;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1.2); }
+    50% { transform: scale(1.25); }
+    100% { transform: scale(1.2); }
+}
+
+#videoPlayer {
+    background: #000;
+    border-radius: 10px;
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: contain;
+}
+
+.loader {
+    color: #22c55e;
+    font-size: 18px;
+}
+
+.ai-input {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+}
+
+.ai-input:focus {
+    outline: none;
+    border-color: #22c55e;
+    box-shadow: 0 0 15px rgba(34,197,94,0.3);
+}
+
+#video-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #22c55e, #4ade80);
+    width: 0%;
+    transition: width 0.3s ease;
+    z-index: 10;
+}
+</style>
 
 <script>
-	//webkitSpeechRecognition api for speech to text conversion
-	function record(){
-		var recognition = new webkitSpeechRecognition();
-		recognition.lang='en-IN';
+// ==================== GLOBAL VARIABLES ====================
+let currentVideoIndex = 0;
+let videoWords = [];
+let isPlaying = false;
+let videoTimeout = null;
 
-		recognition.onresult = function(event){
-			console.log(event)
-			document.getElementById('speechToText').value = event.results[0][0].transcript;
-		}
-		recognition.start();
-	 }
-	function play()
-	{
-		var videoSource = new Array();
-		var	videos = document.getElementById("list").getElementsByTagName("li");
-		var j;
-		for(j=0;j<videos.length;j++)
-		{
-			videoSource[j] = "/static/" + videos[j].innerHTML +".mp4";
-		}
+// ==================== PLAY FULL SENTENCE ====================
+function playSentence() {
+    console.log('🎬 Playing full sentence');
+    
+    // Get all words
+    const wordChips = document.querySelectorAll('.word-chip');
+    videoWords = [];
+    
+    wordChips.forEach(chip => {
+        videoWords.push(chip.getAttribute('data-word') || chip.innerText);
+    });
+    
+    if (videoWords.length === 0) {
+        alert('No words to play. Please convert a sentence first.');
+        return;
+    }
+    
+    console.log('Words to play:', videoWords);
+    
+    // Reset index
+    currentVideoIndex = 0;
+    isPlaying = true;
+    
+    // Update UI
+    document.getElementById('playButton').style.display = 'none';
+    document.getElementById('stopButton').style.display = 'block';
+    document.getElementById('video-status').innerHTML = `Playing sentence...`;
+    
+    // Remove playing class from all chips
+    wordChips.forEach(chip => chip.classList.remove('playing'));
+    
+    // Start playing first video
+    playNextVideo();
+}
 
-		var i = 0; // define i
-		var videoCount = videoSource.length;
+// ==================== PLAY NEXT VIDEO ====================
+function playNextVideo() {
+    if (!isPlaying || currentVideoIndex >= videoWords.length) {
+        // Finished playing
+        finishPlayback();
+        return;
+    }
+    
+    const word = videoWords[currentVideoIndex];
+    const player = document.getElementById('videoPlayer');
+    const wordChips = document.querySelectorAll('.word-chip');
+    
+    console.log(`Playing ${currentVideoIndex + 1}/${videoWords.length}: ${word}`);
+    
+    // Update UI
+    document.getElementById('current-word').innerHTML = `Now signing: <span style="color:#22c55e; font-weight:bold;">${word}</span>`;
+    document.getElementById('video-status').innerHTML = `Playing (${currentVideoIndex + 1}/${videoWords.length}): ${word}`;
+    
+    // Update progress bar
+    const progress = ((currentVideoIndex) / videoWords.length) * 100;
+    document.getElementById('video-progress').style.width = progress + '%';
+    
+    // Highlight current word
+    wordChips.forEach((chip, index) => {
+        if (index === currentVideoIndex) {
+            chip.classList.add('playing');
+        } else {
+            chip.classList.remove('playing');
+        }
+    });
+    
+    // Construct video path
+    const videoPath = `/static/${word}.mp4`;
+    console.log('Video path:', videoPath);
+    
+    // Set video source
+    player.src = videoPath;
+    player.load();
+    
+    // Try to play
+    const playPromise = player.play();
+    
+    if (playPromise !== undefined) {
+        playPromise.catch(error => {
+            console.log(`Could not play ${word}.mp4:`, error);
+            // If video not found, show message and move to next after short delay
+            document.getElementById('current-word').innerHTML = `⚠️ Video not found for: ${word}`;
+            
+            // Clear any existing timeout
+            if (videoTimeout) clearTimeout(videoTimeout);
+            
+            // Move to next word after 1 second
+            videoTimeout = setTimeout(() => {
+                currentVideoIndex++;
+                playNextVideo();
+            }, 1000);
+        });
+    }
+}
 
-		function videoPlay(videoNum)
-		{
-			document.getElementById("list").getElementsByTagName("li")[videoNum].style.color = "#09edc7";
-			document.getElementById("list").getElementsByTagName("li")[videoNum].style.fontSize = "xx-large";
-			document.getElementById("videoPlayer").setAttribute("src", videoSource[videoNum]);
-	    	document.getElementById("videoPlayer").load();
-	    	document.getElementById("videoPlayer").play();
+// ==================== FINISH PLAYBACK ====================
+function finishPlayback() {
+    console.log('✅ Finished playing sentence');
+    
+    isPlaying = false;
+    
+    // Update UI
+    document.getElementById('playButton').style.display = 'block';
+    document.getElementById('stopButton').style.display = 'none';
+    document.getElementById('video-status').innerHTML = '✅ Sentence complete';
+    document.getElementById('current-word').innerHTML = 'Done!';
+    document.getElementById('video-progress').style.width = '100%';
+    
+    // Remove playing class from all chips
+    document.querySelectorAll('.word-chip').forEach(chip => chip.classList.remove('playing'));
+    
+    // Reset video
+    const player = document.getElementById('videoPlayer');
+    player.src = '';
+    player.load();
+    
+    // Clear any timeout
+    if (videoTimeout) {
+        clearTimeout(videoTimeout);
+        videoTimeout = null;
+    }
+}
 
-		}
-		document.getElementById('videoPlayer').addEventListener('ended', myHandler, false);
-		document.getElementById("list").getElementsByTagName("li")[0].style.color = "#09edc7";
-		document.getElementById("list").getElementsByTagName("li")[0].style.fontSize = "xx-large";
+// ==================== STOP PLAYBACK ====================
+function stopPlayback() {
+    console.log('⏹️ Stopping playback');
+    
+    isPlaying = false;
+    
+    // Stop video
+    const player = document.getElementById('videoPlayer');
+    player.pause();
+    player.src = '';
+    player.load();
+    
+    // Clear timeout
+    if (videoTimeout) {
+        clearTimeout(videoTimeout);
+        videoTimeout = null;
+    }
+    
+    // Update UI
+    document.getElementById('playButton').style.display = 'block';
+    document.getElementById('stopButton').style.display = 'none';
+    document.getElementById('video-status').innerHTML = 'Playback stopped';
+    document.getElementById('current-word').innerHTML = '';
+    document.getElementById('video-progress').style.width = '0%';
+    
+    // Remove playing class from all chips
+    document.querySelectorAll('.word-chip').forEach(chip => chip.classList.remove('playing'));
+}
 
-		videoPlay(0); // play the video
+// ==================== VIDEO EVENT HANDLERS ====================
+document.addEventListener('DOMContentLoaded', function() {
+    const player = document.getElementById('videoPlayer');
+    
+    // When video ends, play next
+    player.addEventListener('ended', function() {
+        console.log('Video ended naturally');
+        
+        if (isPlaying) {
+            currentVideoIndex++;
+            playNextVideo();
+        }
+    });
+    
+    // Handle video errors
+    player.addEventListener('error', function() {
+        console.log('Video error');
+        
+        if (isPlaying) {
+            // Move to next word
+            currentVideoIndex++;
+            playNextVideo();
+        }
+    });
+    
+    // Update progress bar as video plays
+    player.addEventListener('timeupdate', function() {
+        if (player.duration) {
+            const videoProgress = (player.currentTime / player.duration) * 100;
+            // Don't show video progress, just keep sentence progress
+        }
+    });
+});
 
-		function myHandler()
-		{
-	 		document.getElementById("list").getElementsByTagName("li")[i].style.color = "#feda6a";
-			document.getElementById("list").getElementsByTagName("li")[i].style.fontSize = "20px";
-			i++;
-	    	if (i == videoCount)
-	    	{
-	       	    document.getElementById("videoPlayer").pause();
-	    	}
-	     	else
-	     	{
-	        	videoPlay(i);
-	    	}
-		}
-	}
-	/* LETS USE ONLY PLAY PAUSE BUTTON WITH 720 *420 ,IT FITS THE SCREEN
-	function makeBig() {
-	    document.getElementById("videoPlayer").width = 560;
-		document.getElementById("videoPlayer").height = 360;
-	}
+// ==================== MICROPHONE FUNCTION ====================
+function record() {
+    console.log('🎤 Microphone activated');
+    
+    if (!('webkitSpeechRecognition' in window)) {
+        alert('Please use Chrome browser for speech recognition');
+        return;
+    }
+    
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = 'en-IN';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    
+    recognition.onstart = function() {
+        document.getElementById('video-status').innerHTML = '🎤 Listening...';
+    };
+    
+    recognition.onresult = function(e) {
+        const transcript = e.results[0][0].transcript;
+        console.log('✅ Recognized:', transcript);
+        document.getElementById('speechToText').value = transcript;
+        
+        // Auto submit
+        setTimeout(() => {
+            document.getElementById('speechForm').submit();
+        }, 500);
+    };
+    
+    recognition.onerror = function(e) {
+        console.error('❌ Speech error:', e.error);
+        document.getElementById('video-status').innerHTML = '❌ Speech error';
+    };
+    
+    recognition.start();
+}
 
-	function makeSmall() {
-	    document.getElementById("videoPlayer").width = 320;
-		document.getElementById("videoPlayer").height = 180;
-	}
+// ==================== INITIALIZATION ====================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('✅ Page loaded');
+    
+    // Update status if words exist
+    const wordCount = document.querySelectorAll('.word-chip').length;
+    if (wordCount > 0) {
+        document.getElementById('video-status').innerHTML = `Ready to play ${wordCount} signs`;
+    }
+});
 
-	function makeNormal() {
-	    document.getElementById("videoPlayer").width = 420;
-		document.getElementById("videoPlayer").height =280;
-	}*/
-	function playPause(){
-  		if (document.getElementById("videoPlayer").paused){
-    		play();}
-  		else{
-    		document.getElementById("videoPlayer").pause();}
-		}
+// ==================== LOADER ====================
+function showLoader() {
+    document.getElementById('loader').style.display = 'block';
+}
 
-	</script>
-
+// ==================== CLEANUP ====================
+window.addEventListener('beforeunload', function() {
+    // Clear any pending timeouts
+    if (videoTimeout) {
+        clearTimeout(videoTimeout);
+    }
+});
+</script>
 
 {% endblock %}

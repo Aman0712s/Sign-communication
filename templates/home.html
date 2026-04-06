@@ -1,13 +1,211 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block content %}
-<video width="500" height="380" class="center" autoplay loop>
-  <source src= "{% static 'Hello.mp4' %}" type="video/mp4">
-  Your browser does not support the video tag.
+
+<div class="container">
+
+<!-- HERO SECTION -->
+<div class="row align-items-center min-vh-75">
+
+<!-- LEFT CONTENT -->
+<div class="col-lg-6 fade-in">
+
+<h1 class="fw-bold display-4 hero-title">
+
+AI Powered  
+<span class="text-warning glow-text">
+Sign Language Converter
+</span>
+
+</h1>
+
+<p class="mt-4 hero-subtext">
+
+Transform speech and text into real-time sign language animations
+using Artificial Intelligence, NLP, and Computer Vision.
+
+Breaking communication barriers for a more inclusive world.
+
+</p>
+
+<div class="mt-4 d-flex gap-3 flex-wrap">
+
+<a href="{% url 'animation' %}" class="btn btn-ai btn-lg px-4">
+
+🚀 Start Converting
+
+</a>
+
+<a href="{% url 'about' %}" class="btn btn-outline-light btn-lg px-4">
+
+📘 Learn More
+
+</a>
+
+</div>
+
+</div>
+
+
+<!-- RIGHT VIDEO -->
+<div class="col-lg-6 text-center fade-in">
+
+<div class="video-glass">
+
+<video autoplay loop muted>
+
+<source src="{% static 'Hello.mp4' %}" type="video/mp4">
+
 </video>
-	<div class="form-style" align="middle" >
-	<a href="{% url 'animation' %}"><button class="button">Click to Start</button></a>
-	</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- FEATURE HIGHLIGHTS -->
+<div class="row text-center mt-5 g-4">
+
+<div class="col-md-4">
+
+<div class="glass p-4 h-100">
+
+<h3>🎤 Speech Input</h3>
+
+<p class="text-secondary mt-2">
+Voice recognition converts spoken language into text instantly.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="col-md-4">
+
+<div class="glass p-4 h-100">
+
+<h3>🧠 AI Processing</h3>
+
+<p class="text-secondary mt-2">
+NLP analyzes grammar, tense, and meaning before translation.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="col-md-4">
+
+<div class="glass p-4 h-100">
+
+<h3>🤟 Sign Animation</h3>
+
+<p class="text-secondary mt-2">
+Mapped gestures or ML models generate expressive signs.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- STATS / IMPACT BAR -->
+<div class="glass mt-5 p-4 text-center">
+
+<div class="row">
+
+<div class="col-md-3">
+<h2 class="text-warning">500+</h2>
+<p class="text-secondary">Sign Animations</p>
+</div>
+
+<div class="col-md-3">
+<h2 class="text-warning">95%</h2>
+<p class="text-secondary">Accuracy</p>
+</div>
+
+<div class="col-md-3">
+<h2 class="text-warning">Real-Time</h2>
+<p class="text-secondary">Processing</p>
+</div>
+
+<div class="col-md-3">
+<h2 class="text-warning">Accessible</h2>
+<p class="text-secondary">Communication</p>
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- ACCESSIBILITY MESSAGE -->
+<div class="glass mt-5 p-5 text-center">
+
+<h2 class="text-info">
+
+Empowering Inclusive Communication
+
+</h2>
+
+<p class="mt-3 text-secondary" style="max-width:750px; margin:auto;">
+
+Our mission is to make communication seamless between
+hearing and hearing-impaired individuals using scalable AI systems.
+This platform demonstrates how technology can create
+real social impact.
+
+</p>
+
+</div>
+
+</div>
+
+
+
+<!-- PAGE STYLES -->
+<style>
+
+.hero-title{
+    line-height:1.2;
+}
+
+.hero-subtext{
+    font-size:18px;
+    color:#94a3b8;
+}
+
+.video-glass{
+    padding:15px;
+    border-radius:20px;
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(12px);
+    box-shadow:0 0 30px rgba(0,0,0,.6);
+}
+
+.video-glass video{
+    border-radius:15px;
+    width:100%;
+}
+
+.glow-text{
+    text-shadow:0 0 10px rgba(254,218,106,.7);
+}
+
+.min-vh-75{
+    min-height:75vh;
+}
+
+</style>
+
 {% endblock %}

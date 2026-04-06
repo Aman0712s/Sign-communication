@@ -1,18 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="form-style">
-	<h1>Sign Up</h1>
-	<form class="site-form" action="." method="post">
-		{% csrf_token %}
-		{{ form }}
-		<br><br>
-		<input class="submit" type="submit" value="Sign Up">
 
-	</form>
+<div class="col-md-4 mx-auto">
+
+<div class="glass-card fade-in">
+
+<h3 class="text-warning text-center mb-4">Create Account</h3>
+
+<form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+
+<button class="btn btn-success w-100">
+Signup
+</button>
+
+</form>
+
 </div>
-<script type="text/javascript">
-	document.getElementsByTagName("span")[0].innerHTML="";
-	document.getElementsByTagName("span")[1].innerHTML="";
-</script>
+</div>
+
 {% endblock %}
