@@ -1,0 +1,91 @@
+/* ── Auth Pages (Login / Signup) ───────────── */
+
+.auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth__container {
+  width: 100%;
+  max-width: 440px;
+  padding: 0 var(--space-md);
+}
+
+.auth__card {
+  padding: var(--space-2xl);
+}
+
+.auth__header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.auth__icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: var(--space-md);
+}
+
+.auth__header h1 {
+  font-size: 1.75rem;
+  margin-bottom: var(--space-xs);
+}
+
+.auth__header p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Error */
+.auth__error {
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-md);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-sm);
+  color: var(--color-error);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* Form */
+.auth__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.auth__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth__field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.auth__submit {
+  margin-top: var(--space-sm);
+  width: 100%;
+}
+
+/* Footer */
+.auth__footer {
+  text-align: center;
+  margin-top: var(--space-xl);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.auth__footer a {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.auth__footer a:hover {
+  text-decoration: underline;
+}

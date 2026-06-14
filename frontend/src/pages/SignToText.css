@@ -1,0 +1,164 @@
+/* ── Sign to Text Page ─────────────────────── */
+
+.stt__layout {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.stt__camera-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.stt__camera-header h3 {
+  font-size: 1.1rem;
+}
+
+/* Camera Placeholder */
+.stt__camera-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  color: var(--text-muted);
+  background: var(--bg-surface);
+}
+
+.stt__camera-icon {
+  font-size: 3rem;
+  opacity: 0.3;
+}
+
+.stt__camera-placeholder p {
+  font-size: 0.9rem;
+}
+
+/* Live Badge */
+.stt__camera-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #ef4444;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: var(--radius-full);
+  letter-spacing: 0.1em;
+}
+
+.stt__recording-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ef4444;
+  animation: pulse 1s ease infinite;
+}
+
+/* Error */
+.stt__error {
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-sm);
+  color: var(--color-error);
+  font-size: 0.9rem;
+}
+
+/* Sentence */
+.stt__sentence-section {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-xl);
+  border-top: var(--border-subtle);
+}
+
+.stt__sentence-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.stt__sentence-actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.stt__sentence-header h3 {
+  font-size: 1rem;
+}
+
+.stt__sentence {
+  min-height: 60px;
+  padding: var(--space-md);
+  background: var(--bg-glass);
+  border: var(--border-glass);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  word-break: break-all;
+  letter-spacing: 0.1em;
+}
+
+.stt__sentence-placeholder {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: normal;
+}
+
+/* Instructions */
+.stt__instructions {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-xl);
+  border-top: var(--border-subtle);
+}
+
+.stt__instructions h4 {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-sm);
+}
+
+.stt__instructions ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stt__instructions li {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  padding-left: 16px;
+  position: relative;
+}
+
+.stt__instructions li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stt__layout {
+    grid-template-columns: 1fr;
+  }
+}

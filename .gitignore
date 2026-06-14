@@ -43,3 +43,24 @@ db.sqlite3
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Mobile
+mobile/node_modules/
+mobile/.expo/
+
+# ML model weights (large files)
+ml_models/data/models/*.pkl
+ml_models/data/models/*.h5
+ml_models/data/models/*.tflite
+
+# IDE
+.vscode/
+.idea/
+
+# Django collected static
+staticfiles/

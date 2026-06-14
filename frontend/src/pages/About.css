@@ -1,0 +1,77 @@
+/* ── About Page ────────────────────────────── */
+
+.about__mission {
+  margin-bottom: var(--space-3xl);
+}
+
+.about__mission h2 {
+  margin-bottom: var(--space-md);
+  background: linear-gradient(135deg, var(--color-primary), #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.about__mission p {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: var(--space-md);
+}
+
+.about__section-title {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+/* Features Grid */
+.about__features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+.about__features .glass-card h3 {
+  margin-bottom: var(--space-sm);
+  font-size: 1.1rem;
+}
+
+.about__features .glass-card p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+/* Team */
+.about__team {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.about__team-member {
+  text-align: center;
+  min-width: 200px;
+}
+
+.about__team-avatar {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: var(--space-sm);
+}
+
+.about__team-member h4 {
+  margin-bottom: 4px;
+}
+
+.about__team-member p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .about__features {
+    grid-template-columns: 1fr;
+  }
+}

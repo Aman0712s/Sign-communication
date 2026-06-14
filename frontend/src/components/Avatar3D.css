@@ -1,0 +1,30 @@
+/* ── Avatar 3D Container ─────────────────── */
+
+.avatar3d-container {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: linear-gradient(180deg, #0a0a0f 0%, #111118 100%);
+  border: var(--border-glass);
+}
+
+.avatar3d-container canvas {
+  border-radius: var(--radius-lg);
+}
+
+.avatar3d-label {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 16px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  white-space: nowrap;
+  animation: fadeInUp 0.3s ease;
+}
