@@ -11,6 +11,30 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from ml_models.sign_recognizer import predict_sign
+
+@login_required(login_url="login")
+def sign_to_text_view(request):
+    return render(request, 'sign_to_text.html', {'title': 'Sign → Text'})
+
+@csrf_exempt  
+@login_required(login_url="login")
+def predict_sign_api(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            landmarks = data.get('landmarks', [])  # list of 21 {x,y,z} dicts
+            # Convert to list of [x, y, z]
+            lm_list = [[p['x'], p['y'], p['z']] for p in landmarks]
+            label = predict_sign(lm_list)
+            return JsonResponse({'label': label})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    return JsonResponse({'error': 'POST only'}, status=405)
+
 # Download required NLTK data (only once)
 try:
     nltk.data.find('tokenizers/punkt')
